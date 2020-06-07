@@ -1,7 +1,17 @@
+body {
+    background-color: rgb(65, 201, 255);
+}
+
 .line-through {
     text-decoration: line-through !important;
 }
 
 .container {
     margin: 5% auto;
+}
+
+@media only screen and (min-width: 1200px) {
+    .container {
+        width: 50%;
+    }
 }
