@@ -54,9 +54,9 @@ function listTodos(searchPhrase) {
       finishBtn.textContent = 'Finish me!';
       finishBtn.type = 'button';
       finishBtn.classList.add('btn', 'btn-success', 'btn-sm', 'float-right');
-      finishBtn.addEventListener('click', () => {
-        const idx = todosTemp.findIndex(
-          (e) => e.id === finishBtn.parentNode.id
+      finishBtn.addEventListener('click', (e) => {
+        const idx = todos.findIndex(
+          (el) => el.id === e.target.parentNode.id
         );
         if (idx > -1) todos[idx].completed = true;
         document.cookie = `todos=${JSON.stringify(todos)}`;

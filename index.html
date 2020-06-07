@@ -21,15 +21,9 @@
     <script defer src="./index.js"></script>
   </head>
   <body>
-    <div class="container bg-white px-5 pb-5 pt-4 rounded shadow">
+    <div class="container bg-white px-5 pb-4 pt-4 rounded shadow">
       <div class="row mt-0 mb-2">
-        <div class="col-4"></div>
-        <div class="col-4">
-          <div class="form-check">
-            <input id="completed-checkbox" type="checkbox" class="form-check-input">
-            <label for="completed-checkbox" class="form-check-label">Wyświetl zakończone</label>
-          </div>
-        </div>
+        <div class="col-8"></div>
         <div class="col">
           <input
             id="search-field"
@@ -39,7 +33,6 @@
           />
         </div>
       </div>
-
       <h1 class="text-center">Todos</h1>
       <div class="row">
         <div class="col">
@@ -64,6 +57,21 @@
           </button>
         </div>
         <div class="col-2"></div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-8"></div>
+        <div class="col-4">
+          <div class="form-check float-right">
+            <input
+              id="completed-checkbox"
+              type="checkbox"
+              class="form-check-input"
+            />
+            <label for="completed-checkbox" class="form-check-label"
+              >Wyświetl zakończone</label
+            >
+          </div>
+        </div>
       </div>
       <h1 id="done-header" class="d-none text-center pt-2 mt-3 border-top">
         Done
