@@ -13,23 +13,26 @@ const todos =
 let todoIndex = todos.length
   ? Math.max(...todos.map((e) => e.id.split('-')[1])) + 1
   : 0;
-let onlyInProgressTodos = true;
+const filters = {
+  onlyInProgressTodos: true,
+  searchPhrase: '',
+};
 
-function listTodos(searchPhrase) {
+function listTodos() {
   let todosTemp = [...todos];
 
-  if (searchPhrase) {
+  if (filters.searchPhrase) {
     todosTemp = todosTemp.filter((e) =>
-      e.text.toLowerCase().includes(searchPhrase)
+      e.text.toLowerCase().includes(filters.searchPhrase)
     );
   }
 
-  if (onlyInProgressTodos) {
+  if (filters.onlyInProgressTodos) {
     todosTemp = todosTemp.filter((e) => !e.completed);
     document.querySelector('#done-header').classList.add('d-none');
   }
 
-  if (todosTemp.some((e) => e.completed) && !onlyInProgressTodos) {
+  if (todosTemp.some((e) => e.completed) && !filters.onlyInProgressTodos) {
     document.querySelector('#done-header').classList.remove('d-none');
   }
 
@@ -55,9 +58,7 @@ function listTodos(searchPhrase) {
       finishBtn.type = 'button';
       finishBtn.classList.add('btn', 'btn-success', 'btn-sm', 'float-right');
       finishBtn.addEventListener('click', (e) => {
-        const idx = todos.findIndex(
-          (el) => el.id === e.target.parentNode.id
-        );
+        const idx = todos.findIndex((el) => el.id === e.target.parentNode.id);
         if (idx > -1) todos[idx].completed = true;
         document.cookie = `todos=${JSON.stringify(todos)}`;
         listTodos();
@@ -91,10 +92,13 @@ field.addEventListener('keyup', (e) =>
   e.keyCode == 13 ? button.click() : null
 );
 
-searchField.addEventListener('input', (e) => listTodos(e.target.value));
+searchField.addEventListener('input', (e) => {
+  filters.searchPhrase = e.target.value.toLowerCase();
+  listTodos();
+});
 
 completedCheckbox.addEventListener('change', (e) => {
-  onlyInProgressTodos = !e.target.checked;
+  filters.onlyInProgressTodos = !e.target.checked;
   listTodos();
 });
 
