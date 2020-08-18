@@ -1,95 +1,140 @@
-const todos =
-  document.cookie.split(';').reduce((res, c) => {
-    const [key, val] = c.trim().split('=').map(decodeURIComponent);
-    const allNumbers = (str) => /^\d+$/.test(str);
-    try {
-      return Object.assign(res, {
-        [key]: allNumbers(val) ? val : JSON.parse(val),
-      });
-    } catch (e) {
-      return Object.assign(res, { [key]: val });
-    }
-  }, {}).todos || [];
-let todoIndex = todos.length
-  ? Math.max(...todos.map((e) => e.id.split('-')[1])) + 1
-  : 0;
+const todos = JSON.parse(localStorage.getItem('todos')) || [];
 const filters = {
   onlyInProgressTodos: true,
   searchPhrase: '',
 };
 
+const todoInputButton = document.querySelector('#todo-input-button');
+const todoInputFields = document.querySelector('#todo-input-fields');
+const input = {
+  title: document.querySelector('#todo-input-field-title'),
+  description: document.querySelector('#todo-input-field-description'),
+  finishByDate: document.querySelector('#todo-input-field-finish-by-date'),
+  finishByTime: document.querySelector('#todo-input-field-finish-by-time'),
+};
+const todoList = document.querySelector('#todo-list');
+const doneList = document.querySelector('#done-list');
+const searchField = document.querySelector('#search-field');
+const completedCheckbox = document.querySelector('#completed-checkbox');
+
 function listTodos() {
   let todosTemp = [...todos];
 
+  todoList.innerHTML = '';
+  doneList.innerHTML = '';
+  Object.keys(input).forEach((e) => (input[e].value = ''));
+
   if (filters.searchPhrase) {
     todosTemp = todosTemp.filter((e) =>
-      e.text.toLowerCase().includes(filters.searchPhrase)
+      e.title.toLowerCase().includes(filters.searchPhrase)
     );
   }
 
   if (filters.onlyInProgressTodos) {
     todosTemp = todosTemp.filter((e) => !e.completed);
     document.querySelector('#done-header').classList.add('d-none');
-  }
-
-  if (todosTemp.some((e) => e.completed) && !filters.onlyInProgressTodos) {
+  } else {
     document.querySelector('#done-header').classList.remove('d-none');
   }
 
-  todoList.innerHTML = '';
-  doneList.innerHTML = '';
-  field.value = '';
+  todosTemp.forEach((e, idx) => {
+    const classesToAdd = ['card', 'my-1'];
+    const newEl = document.createElement('div');
+    const newElHeader = document.createElement('div');
+    const header = document.createElement('h5');
+    const headerAccordionLink = document.createElement('button');
+    const actionButton = document.createElement('button');
+    const newElBody = document.createElement('div');
+    const body = document.createElement('div');
 
-  todosTemp.forEach((e) => {
-    const classesToAdd = ['list-group-item', 'my-1'];
-    const newEl = document.createElement('li');
-    const newElText = document.createElement('span');
+    actionButton.setAttribute('type', 'button');
+    actionButton.classList.add('btn', 'btn-sm', 'float-right');
+
+    headerAccordionLink.classList.add('btn', 'btn-link');
+    headerAccordionLink.textContent = e.title;
+    headerAccordionLink.setAttribute('data-toggle', 'collapse');
+    headerAccordionLink.setAttribute('data-target', `#collapse-${idx}`);
+    headerAccordionLink.setAttribute('aria-controls', `#collapse-${idx}`);
+    headerAccordionLink.addEventListener('click', (e) =>
+      $(`#collapse-${idx}`).toggle()
+    );
+    header.append(headerAccordionLink);
+
+    newElHeader.classList.add('card-header');
+    newElHeader.id = `header-${idx}`;
+    newElHeader.append(header);
+
+    body.classList.add('card-body');
+    body.innerHTML = `<div class="row"><div class="col-6"><h5>Description:</h5><span>${
+      e.description
+    }</span></div><div class="col-6"><h5>Due on:</h5><span>${moment(
+      e.finishBy
+    ).format('YYYY-MM-DD HH:mm')}</span></div></div>`;
+    newElBody.id = `collapse-${idx}`;
+    newElBody.setAttribute('aria-labelledby', `header-${idx}`);
+    newElBody.setAttribute('data-parent', `#todo-list`);
+    newElBody.classList.add('collapse');
+    newElBody.append(body);
 
     newEl.id = e.id;
-    newElText.textContent = e.text;
-    newEl.appendChild(newElText);
+    newEl.append(newElHeader, newElBody);
 
     if (e.completed) {
-      classesToAdd.push('line-through', 'list-group-item-success');
-      doneList.appendChild(newEl);
-    } else {
-      const finishBtn = document.createElement('button');
-      finishBtn.textContent = 'Finish me!';
-      finishBtn.type = 'button';
-      finishBtn.classList.add('btn', 'btn-success', 'btn-sm', 'float-right');
-      finishBtn.addEventListener('click', (e) => {
-        const idx = todos.findIndex((el) => el.id === e.target.parentNode.id);
-        if (idx > -1) todos[idx].completed = true;
-        document.cookie = `todos=${JSON.stringify(todos)}`;
+      classesToAdd.push('line-through', 'border-success');
+      actionButton.textContent = 'Unfinish me!';
+      actionButton.classList.add('btn-warning');
+      actionButton.addEventListener('click', (e) => {
+        utils.manageCompletion(
+          e,
+          e.target.parentNode.parentNode.id,
+          todos,
+          false
+        );
         listTodos();
       });
-      newEl.appendChild(finishBtn);
-      classesToAdd.push('list-group-item-warning');
-      todoList.appendChild(newEl);
+      newElHeader.append(actionButton);
+      newEl.classList.add(...classesToAdd);
+      doneList.append(newEl);
+    } else {
+      actionButton.textContent = 'Finish me!';
+      actionButton.classList.add('btn-success');
+      actionButton.addEventListener('click', (e) => {
+        utils.manageCompletion(
+          e,
+          e.target.parentNode.parentNode.id,
+          todos,
+          true
+        );
+        listTodos();
+      });
+      newElHeader.append(actionButton);
+      newEl.classList.add(...classesToAdd);
+      todoList.append(newEl);
     }
-    newEl.classList.add(...classesToAdd);
   });
 }
 
-const button = document.querySelector('#todo-input-button');
-const field = document.querySelector('#todo-input-field');
-const todoList = document.querySelector('#todo-list');
-const doneList = document.querySelector('#done-list');
-const searchField = document.querySelector('#search-field');
-const completedCheckbox = document.querySelector('#completed-checkbox');
-
-button.addEventListener('click', (e) => {
+todoInputButton.addEventListener('click', (e) => {
+  // TODO: Add error popup
+  if (Object.values(input).findIndex((e) => !e.value) > -1) return;
+  debugger
   todos.push({
-    text: field.value,
+    title: input.title.value,
+    description: input.description.value,
     completed: false,
-    id: `todo-${todoIndex++}`,
+    id: uuidv4(),
+    createdAt: moment().valueOf(),
+    lastModified: moment().valueOf(),
+    finishBy: moment(
+      `${input.finishByDate.value} ${input.finishByTime.value}`
+    ).valueOf(),
   });
-  document.cookie = `todos=${JSON.stringify(todos)}`;
+  localStorage.setItem('todos', JSON.stringify(todos));
   listTodos();
 });
 
-field.addEventListener('keyup', (e) =>
-  e.keyCode == 13 ? button.click() : null
+todoInputFields.addEventListener('keyup', (e) =>
+  e.keyCode == 13 ? todoInputButton.click() : null
 );
 
 searchField.addEventListener('input', (e) => {
@@ -102,4 +147,11 @@ completedCheckbox.addEventListener('change', (e) => {
   listTodos();
 });
 
+window.addEventListener('storage', (e) => {
+  e === 'todos' ? (todos = e.newValue) : null;
+  listTodos();
+});
+
+utils.fillSelection(input.finishByDate, 'dates');
+utils.fillSelection(input.finishByTime, 'timeSlots');
 listTodos();
