@@ -55,9 +55,7 @@ function listTodos() {
     headerAccordionLink.setAttribute('data-toggle', 'collapse');
     headerAccordionLink.setAttribute('data-target', `#collapse-${idx}`);
     headerAccordionLink.setAttribute('aria-controls', `#collapse-${idx}`);
-    headerAccordionLink.addEventListener('click', (e) =>
-      $(`#collapse-${idx}`).toggle()
-    );
+    
     header.append(headerAccordionLink);
 
     newElHeader.classList.add('card-header');
@@ -80,7 +78,7 @@ function listTodos() {
     newEl.append(newElHeader, newElBody);
 
     if (e.completed) {
-      classesToAdd.push('line-through', 'border-success');
+      classesToAdd.push('border-success', 'bg-light');
       actionButton.textContent = 'Unfinish me!';
       actionButton.classList.add('btn-warning');
       actionButton.addEventListener('click', (e) => {

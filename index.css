@@ -1,5 +1,11 @@
+html {
+    min-height: 100%;
+    background-color: #41c9ff;
+    background-image: linear-gradient(135deg, #41c9ff 30%, #007bff 100%);
+}
+
 body {
-    background-color: rgb(65, 201, 255);
+    background-color: transparent;
 }
 
 .line-through {
@@ -12,6 +18,21 @@ body {
 
 .card-header h5 {
     display: inline-block;
+}
+
+.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height 0.35s ease;
+    -o-transition: height 0.35s ease;
+    transition: height 0.4s ease;
+    display: block;
+}
+
+.btn-primary {
+    background-image: linear-gradient(180deg, #41c9ff 0%, #007bff 100%);
+    border: none
 }
 
 @media only screen and (min-width: 1200px) {
