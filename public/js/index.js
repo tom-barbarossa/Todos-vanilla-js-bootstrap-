@@ -63,9 +63,9 @@ function listTodos() {
     newElHeader.append(header);
 
     body.classList.add('card-body');
-    body.innerHTML = `<div class="row"><div class="col-6"><h5>Description:</h5><span>${
+    body.innerHTML = `<div class="row"><div class="col-12 col-sm-6 text-xs-center mb-2"><h5>Description:</h5><span>${
       e.description
-    }</span></div><div class="col-6"><h5>Due on:</h5><span>${moment(
+    }</span></div><div class="col-12 col-sm-6 text-xs-center mb-2"><h5>Due on:</h5><span>${moment(
       e.finishBy
     ).format('YYYY-MM-DD HH:mm')}</span></div></div>`;
     newElBody.id = `collapse-${idx}`;
@@ -115,7 +115,6 @@ function listTodos() {
 todoInputButton.addEventListener('click', (e) => {
   // TODO: Add error popup
   if (Object.values(input).findIndex((e) => !e.value) > -1) return;
-  debugger
   todos.push({
     title: input.title.value,
     description: input.description.value,

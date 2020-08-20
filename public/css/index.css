@@ -1,42 +1,59 @@
 html {
-    min-height: 100%;
-    background-color: #41c9ff;
-    background-image: linear-gradient(135deg, #41c9ff 30%, #007bff 100%);
+  min-height: 100%;
+  background-color: #41c9ff;
+  background-image: linear-gradient(135deg, #41c9ff 30%, #007bff 100%);
 }
 
 body {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .line-through {
-    text-decoration: line-through !important;
+  text-decoration: line-through !important;
 }
 
 .container {
-    margin: 5% auto;
+  margin: 10% auto;
 }
 
 .card-header h5 {
-    display: inline-block;
+  display: inline-block;
+}
+
+.card-body {
+    border-bottom: 1px solid rgba(0,0,0,.125);
 }
 
 .collapsing {
-    position: relative;
-    height: 0;
-    overflow: hidden;
-    -webkit-transition: height 0.35s ease;
-    -o-transition: height 0.35s ease;
-    transition: height 0.4s ease;
-    display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  -webkit-transition: height 0.35s ease;
+  -o-transition: height 0.35s ease;
+  transition: height 0.4s ease;
+  display: block;
 }
 
 .btn-primary {
-    background-image: linear-gradient(180deg, #41c9ff 0%, #007bff 100%);
-    border: none
+  background-image: linear-gradient(180deg, #41c9ff 0%, #007bff 100%);
+  border: none;
+}
+
+.text-xs-center {
+  text-align: center;
 }
 
 @media only screen and (min-width: 1200px) {
-    .container {
-        width: 50%;
-    }
+  .container {
+    width: 50%;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .container {
+    margin: 5% auto;
+  }
+  .text-xs-center {
+    text-align: initial;
+  }
 }
