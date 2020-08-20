@@ -1,12 +1,30 @@
 {
   "name": "todo-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "A todo app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
   },
-  "author": "",
+  "author": "Tomasz Leszczynski",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-barbarossa/Todos-vanilla-js-bootstrap-.git"
+  },
+  "keywords": [
+    "todo",
+    "node",
+    "express",
+    "bootstrap"
+  ],
+  "bugs": {
+    "url": "https://github.com/tom-barbarossa/Todos-vanilla-js-bootstrap-/issues"
+  },
+  "homepage": "https://github.com/tom-barbarossa/Todos-vanilla-js-bootstrap-#readme"
 }
